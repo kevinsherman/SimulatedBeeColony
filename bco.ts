@@ -1,4 +1,29 @@
 class Bee {
+    public status: number;
+    public memoryMatrix: string[];
+    public measureOfQuality: number;
+    public numberOfVisits: number;
+    
+    constructor(status: number, memoryMatrix: string[], measureOfQuality: number, numberOfVisits: number) {
+        this.status = status;
+        this.memoryMatrix = new Array(memoryMatrix.length);
+        //Array.Copy(memoryMatrix, this.memoryMatrix, memoryMatrix.length);
+        this.measureOfQuality = measureOfQuality;
+        this.numberOfVisits = numberOfVisits;
+    }
+    
+    ToString(): string{
+        var s: string = "";
+        s+= "Status = " + this.status + "\n";
+        s+= " Memory = " + "\n";
+        for(var i = 0; i < this.memoryMatrix.length-1; ++i){
+            s += this.memoryMatrix[i] + "->";
+        }
+        s+= this.memoryMatrix[this.memoryMatrix.length-1] + "\n";
+        s+= " Quality = " + this.measureOfQuality.toLocaleString();
+        s+= " Number visits = " + this.numberOfVisits;
+        return s;
+    }
     
 }
 

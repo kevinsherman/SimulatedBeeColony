@@ -1,0 +1,59 @@
+class CitiesData {
+    public cities: string[];
+    public start: number = 65;
+
+    constructor(numberCities: number) {
+        this.cities = new Array(numberCities);
+        for(var i : number = 0; i < this.cities.length; ++i ){
+            this.cities[i] = String.fromCharCode(i + this.start);
+        }
+    }
+    
+    Distance(firstCity: string, secondCity: string): number {
+        if(firstCity < secondCity){
+            return 1 * (secondCity.charCodeAt(0) - firstCity.charCodeAt(0));
+        } else {
+            return 1.5 * (firstCity.charCodeAt(0) - secondCity.charCodeAt(0));
+        }
+    }
+    
+    ShortestPathLength() : number {
+        return 1 * (this.cities.length - 1);
+    }
+    
+    NumberOfPossiblePaths() : number {
+        var n = this.cities.length;
+        var answer : number = 1;
+        
+        for(var i: number = 1; i <= n; ++i){
+            answer *= i;
+        }
+        return answer;
+    }
+    
+    ToString() : string {
+        var s : string = "";
+        s += "Cities: ";
+        for(var i : number = 0; i < this.cities.length; ++i){
+            s += this.cities[i] + " ";
+        }
+        return s;
+    }
+}
+
+function test2() {
+    var cd : CitiesData = new CitiesData(10);
+    
+    for(var i = 0; i < cd.cities.length; i++){
+        console.log("CITY: " + i + " " + cd.cities[i]);
+    }
+    
+    var x = cd.Distance(cd.cities[3], cd.cities[2]);
+    console.log("DISTANCE: " + x);
+    
+    console.log("SHORTEST: " + cd.ShortestPathLength());
+    console.log("NUM Paths: " + cd.NumberOfPossiblePaths())
+    console.log("TOSTRING: " + cd.ToString());
+}
+
+test2();

@@ -53,6 +53,7 @@ class Hive {
         for(var i = 0; i < this.bestMemoryMatrix.length-1; ++i){
             s += this.bestMemoryMatrix[i] + "->";
         }
+        s+= this.bestMemoryMatrix[this.bestMemoryMatrix.length-1]; // <- Add the last element without the trailing '->'
         s += "\nPath Quality: " + this.bestMeasureOfQuality;
         return s;
     }
@@ -138,7 +139,7 @@ class Hive {
         return answer;
     }
     
-    Solve(doProgressBar: boolean): void{
+    Solve(doProgressBar: boolean): number{
         var pb: boolean = doProgressBar;
         var numberOfSymbolsToPrint: number = 10; 
         var increment = this.maxNumberCycles / numberOfSymbolsToPrint;
@@ -164,8 +165,14 @@ class Hive {
             if (pb && cycle % increment == 0){
                 process.stdout.write("^");   
             }
-        } 
+            
+            if(this.bestMeasureOfQuality == 19){
+                // short circuit if we hit known best measure
+                break;
+            }
+        }
         if (pb) console.log("");
+        return cycle;
     }
     
     ProcessActiveBee(i: number) : void{
@@ -339,19 +346,19 @@ roughly 75 percent, 10 percent and 15 percent respectively.
 
 function main(args: string[]):void {
     console.log("\nBegin Simulated Bee Colony algorithm demo\n");
-    console.log("Loading cities data for SBC Traveling Salesman Problem analysis");
+    //console.log("Loading cities data for SBC Traveling Salesman Problem analysis");
     var citiesData: CitiesData = new CitiesData(20);
     console.log(citiesData.ToString());
-    console.log("Number of cities: " + citiesData.cities.length);
-    console.log("Number of possible paths: " + citiesData.NumberOfPossiblePaths().toLocaleString());
-    console.log("Best possible solution (shortest path) length = " + citiesData.ShortestPathLength().toLocaleString());
+    //console.log("Number of cities: " + citiesData.cities.length);
+    //console.log("Number of possible paths: " + citiesData.NumberOfPossiblePaths().toLocaleString());
+    //console.log("Best possible solution (shortest path) length = " + citiesData.ShortestPathLength().toLocaleString());
     
     var totalNumberBees : number = 100;
     var numberInactive : number = 20;
     var numberActive : number = 50;
     var numberScout : number = 30;
     var maxNumberVisits : number = 100;
-    var maxNumberCycles : number = 3460;
+    var maxNumberCycles : number = 50000;
     
     var hive: Hive = new Hive(totalNumberBees, numberInactive, numberActive, numberScout, maxNumberVisits, maxNumberCycles, citiesData);
     
@@ -359,9 +366,10 @@ function main(args: string[]):void {
     console.log(hive.ToString());
     
     var doProgressBar: boolean = true;
-    hive.Solve(doProgressBar);
+    var best: number = hive.Solve(doProgressBar);
     
     console.log("\nFinal hive");
+    console.log("Number of Iterations: " + best);
     console.log(hive.ToString());
     
     console.log("End Simulated Bee Colony demo");

@@ -346,19 +346,19 @@ roughly 75 percent, 10 percent and 15 percent respectively.
 
 function main(args: string[]):void {
     console.log("\nBegin Simulated Bee Colony algorithm demo\n");
-    //console.log("Loading cities data for SBC Traveling Salesman Problem analysis");
+    console.log("Loading cities data for SBC Traveling Salesman Problem analysis");
     var citiesData: CitiesData = new CitiesData(20);
     console.log(citiesData.ToString());
-    //console.log("Number of cities: " + citiesData.cities.length);
-    //console.log("Number of possible paths: " + citiesData.NumberOfPossiblePaths().toLocaleString());
-    //console.log("Best possible solution (shortest path) length = " + citiesData.ShortestPathLength().toLocaleString());
+    console.log("Number of cities: " + citiesData.cities.length);
+    console.log("Number of possible paths: " + citiesData.NumberOfPossiblePaths().toLocaleString());
+    console.log("Best possible solution (shortest path) length = " + citiesData.ShortestPathLength().toLocaleString());
     
     var totalNumberBees : number = 100;
     var numberInactive : number = 20;
     var numberActive : number = 50;
     var numberScout : number = 30;
     var maxNumberVisits : number = 100;
-    var maxNumberCycles : number = 50000;
+    var maxNumberCycles : number = 3460; // <-- This usually needs to be increased to get a more accurate 'bestMeasureOfQuality' 
     
     var hive: Hive = new Hive(totalNumberBees, numberInactive, numberActive, numberScout, maxNumberVisits, maxNumberCycles, citiesData);
     

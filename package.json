@@ -4,15 +4,15 @@
   "description": "",
   "main": "bco.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently 'tsc -w simulatedBeeColony.ts' 'nodemon simulatedBeeColony.js'"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/kevinsherman/beecolony.git"
+    "url": "git@github.com:kevinsherman/SimulatedBeeColony.git"
   },
   "author": "Kevin R. Sherman",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/kevinsherman/beecolony#readme",
+  "homepage": "https://github.com/kevinsherman/SimulatedBeeColony/blob/master/README.md",
   "devDependencies": {
     "typings": "^0.8.1"
   }

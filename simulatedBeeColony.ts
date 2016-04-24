@@ -7,8 +7,6 @@ class Bee {
     
     constructor(status: number, memoryMatrix: string[], measureOfQuality: number, numberOfVisits: number) {
         this.status = status;
-        this.memoryMatrix = new Array(memoryMatrix.length); // is this necessary?
-        //Array.Copy(memoryMatrix, this.memoryMatrix, memoryMatrix.length);
         this.memoryMatrix = memoryMatrix.slice();
         this.measureOfQuality = measureOfQuality;
         this.numberOfVisits = numberOfVisits;
@@ -51,7 +49,10 @@ class Hive {
     public indexesOfInactiveBees: Array<number>;
    
     ToString(): string {
-        var s: string = "\nBest Path Found: " + this.bestMemoryMatrix.toString();
+        var s: string = "Best Path Found: ";
+        for(var i = 0; i < this.bestMemoryMatrix.length-1; ++i){
+            s += this.bestMemoryMatrix[i] + "->";
+        }
         s += "\nPath Quality: " + this.bestMeasureOfQuality;
         return s;
     }
@@ -113,7 +114,6 @@ class Hive {
     
     GenerateNeighborMemoryMatrix(memoryMatrix: string[]): string[]{
         var result = memoryMatrix.slice();
-
         var ranIndex: number = this.getRandomInt(0, result.length);
         var adjIndex: number;
         if (ranIndex == result.length - 1)
@@ -183,7 +183,7 @@ class Hive {
                 }
             }
             else { // No mistake
-                this.bees[i].memoryMatrix = neighbor; // Array.Copy(neighbor, bees[i].memoryMatrix, neighbor.Length);
+                this.bees[i].memoryMatrix = neighbor;
                 this.bees[i].measureOfQuality = neighborQuality;
                 this.bees[i].numberOfVisits = 0; 
                 memoryWasUpdated = true; 
@@ -191,7 +191,7 @@ class Hive {
         }
         else { // Did not find better neighbor
             if (prob < this.probMistake) { // Mistake
-                this.bees[i].memoryMatrix = neighbor; // Array.Copy(neighbor, bees[i].memoryMatrix, neighbor.Length);
+                this.bees[i].memoryMatrix = neighbor;
                 this.bees[i].measureOfQuality = neighborQuality;
                 this.bees[i].numberOfVisits = 0;
                 memoryWasUpdated = true; 
@@ -213,7 +213,7 @@ class Hive {
         }
         else if (memoryWasUpdated == true) {
             if (this.bees[i].measureOfQuality < this.bestMeasureOfQuality) {
-                this.bestMemoryMatrix = this.bees[i].memoryMatrix;  //Array.Copy(bees[i].memoryMatrix, this.bestMemoryMatrix, bees[i].memoryMatrix.Length); 
+                this.bestMemoryMatrix = this.bees[i].memoryMatrix; 
                 this.bestMeasureOfQuality = this.bees[i].measureOfQuality
             }
             this.DoWaggleDance(i);
@@ -228,10 +228,10 @@ class Hive {
         var randomFoodSourceQuality: number = this.MeasureOfQuality(randomFoodSource);
         
         if (randomFoodSourceQuality < this.bees[i].measureOfQuality) {
-            this.bees[i].memoryMatrix = randomFoodSource; //Array.Copy(randomFoodSource, bees[i].memoryMatrix, randomFoodSource.Length);
+            this.bees[i].memoryMatrix = randomFoodSource;
             this.bees[i].measureOfQuality = randomFoodSourceQuality;
             if (this.bees[i].measureOfQuality < this.bestMeasureOfQuality) {
-                this.bestMemoryMatrix = this.bees[i].memoryMatrix; // Array.Copy(bees[i].memoryMatrix, this.bestMemoryMatrix, bees[i].memoryMatrix.Length);
+                this.bestMemoryMatrix = this.bees[i].memoryMatrix;
                 this.bestMeasureOfQuality = this.bees[i].measureOfQuality;
             } 
         
@@ -249,7 +249,7 @@ class Hive {
             if (this.bees[i].measureOfQuality < this.bees[b].measureOfQuality) {
                 var p: number = this.getRandomDouble(); 
                 if (this.probPersuasion > p) {
-                    this.bees[b].memoryMatrix = this.bees[i].memoryMatrix; //Array.Copy(bees[i].memoryMatrix, bees[b].memoryMatrix, bees[i].memoryMatrix.Length);
+                    this.bees[b].memoryMatrix = this.bees[i].memoryMatrix;
                     this.bees[b].measureOfQuality = this.bees[i].measureOfQuality;
                 } 
             } 

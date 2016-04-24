@@ -22,8 +22,23 @@ var Bee = (function () {
 }());
 var Hive = (function () {
     function Hive(totalNumberBees, numberInactive, numberActive, numberScout, maxNumberVisits, maxNumberCycles, citiesData) {
+        // Hive data fields here
+        this.random = null;
+        this.probPersuasion = 0.90;
+        this.probMistake = 0.01;
+        this.random = this.getRandomInt();
+        this.totalNumberBees = totalNumberBees;
+        this.numberInactive = numberInactive;
+        this.numberActive = numberActive;
+        this.numberScout = numberScout;
+        this.maxNumberVisits = maxNumberVisits;
+        this.maxNumberCycles = maxNumberCycles;
+        this.citiesData = citiesData;
+        this.bees = new Bee[totalNumberBees];
+        this.bestMemoryMatrix = this.GenerateRandomMemoryMatrix();
+        this.bestMeasureOfQuality = this.MeasureOfQuality(this.bestMemoryMatrix);
+        this.indexesOfInactiveBees = new Array[numberInactive];
     }
-    // Hive data fields here
     Hive.prototype.ToString = function () {
         return null;
     };
@@ -45,6 +60,11 @@ var Hive = (function () {
     Hive.prototype.ProcessInactiveBee = function (i) {
     };
     Hive.prototype.DoWaggleDance = function (i) {
+    };
+    Hive.prototype.getRandomInt = function () {
+        var min = -2147483648;
+        var max = 2147483647;
+        return Math.floor(Math.random() * (max - min)) + min;
     };
     return Hive;
 }());

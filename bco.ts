@@ -30,6 +30,25 @@ class Bee {
 class Hive {
     
     // Hive data fields here
+    public random : number = null;
+    public citiesData : CitiesData;
+
+    public totalNumberBees: number; 
+    public numberInactive: number; 
+    public numberActive: number;
+    public numberScout: number;
+
+    public maxNumberCycles: number;
+    public maxNumberVisits: number; 
+
+    public probPersuasion = 0.90;
+    public probMistake = 0.01; 
+
+    public bees: Bee[];
+    public bestMemoryMatrix: string[];
+    public bestMeasureOfQuality: number;
+    public indexesOfInactiveBees: number[];
+   
     ToString(): string {
         return null;
     }
@@ -37,6 +56,21 @@ class Hive {
     constructor(totalNumberBees: number, numberInactive: number, numberActive: number, 
                 numberScout: number, maxNumberVisits: number, maxNumberCycles: number, 
                 citiesData: CitiesData) {
+                    
+        this.random = this.getRandomInt();
+        this.totalNumberBees = totalNumberBees;
+        this.numberInactive = numberInactive;
+        this.numberActive = numberActive;
+        this.numberScout = numberScout;
+        this.maxNumberVisits = maxNumberVisits;
+        this.maxNumberCycles = maxNumberCycles;
+        this.citiesData = citiesData;
+        
+        this.bees = new Bee[totalNumberBees];
+        this.bestMemoryMatrix = this.GenerateRandomMemoryMatrix();
+        this.bestMeasureOfQuality = this.MeasureOfQuality(this.bestMemoryMatrix);
+        
+        this.indexesOfInactiveBees = new Array[numberInactive];
     }
     
     GenerateRandomMemoryMatrix(): string[]{
@@ -69,6 +103,12 @@ class Hive {
     
     DoWaggleDance(i: number) : void{
         
+    }
+    
+    getRandomInt() {
+        var min: number = -2147483648;
+        var max: number = 2147483647;
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 }
 

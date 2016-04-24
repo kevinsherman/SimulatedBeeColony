@@ -1,0 +1,19 @@
+{
+  "name": "beecolony",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bco.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/kevinsherman/beecolony.git"
+  },
+  "author": "Kevin R. Sherman",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/kevinsherman/beecolony#readme",
+  "devDependencies": {
+    "typings": "^0.8.1"
+  }
+}

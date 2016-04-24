@@ -1,3 +1,4 @@
+/// <reference path="./typings/tsd.d.ts" />
 class Bee {
     public status: number;
     public memoryMatrix: string[];
@@ -6,8 +7,9 @@ class Bee {
     
     constructor(status: number, memoryMatrix: string[], measureOfQuality: number, numberOfVisits: number) {
         this.status = status;
-        this.memoryMatrix = new Array(memoryMatrix.length);
+        this.memoryMatrix = new Array(memoryMatrix.length); // is this necessary?
         //Array.Copy(memoryMatrix, this.memoryMatrix, memoryMatrix.length);
+        this.memoryMatrix = memoryMatrix.slice();
         this.measureOfQuality = measureOfQuality;
         this.numberOfVisits = numberOfVisits;
     }
@@ -24,7 +26,6 @@ class Bee {
         s+= " Number visits = " + this.numberOfVisits;
         return s;
     }
-    
 }
 
 class Hive {
@@ -50,7 +51,9 @@ class Hive {
     public indexesOfInactiveBees: Array<number>;
    
     ToString(): string {
-        return null;
+        var s: string = "\nBest Path Found: " + this.bestMemoryMatrix.toString();
+        s += "\nPath Quality: " + this.bestMeasureOfQuality;
+        return s;
     }
     
     constructor(totalNumberBees: number, numberInactive: number, numberActive: number, 
@@ -78,7 +81,7 @@ class Hive {
                 currStatus = 0;
                 this.indexesOfInactiveBees[i]=i;
             } else if (i < this.numberInactive + this.numberScout) {
-                currStatus = 2; // scount
+                currStatus = 2; // scout
             } else {
                 currStatus = 1; // active
             }
@@ -90,57 +93,178 @@ class Hive {
             this.bees[i] = new Bee(currStatus, randomMemoryMatrix, mq, numberOfVisits);
             
             if(this.bees[i].measureOfQuality < this.bestMeasureOfQuality){
-                //Array.Copy(this.bees[i].memoryMatrix, this.bestMemoryMatrix, 
-                //    this.bees[i].memoryMatrix.length);
+                this.bestMemoryMatrix = this.bees[i].memoryMatrix.slice();
                 this.bestMeasureOfQuality = this.bees[i].measureOfQuality;
             }
         }
-        
     }
     
     GenerateRandomMemoryMatrix(): string[]{
         
-        var result: Array<string> = new Array<string>(this.citiesData.cities.length);
-        //Array.Copy(this.citiesData.cities, result, this.citiesData.cities.length);
+        var result = this.citiesData.cities.slice();
         for (var i: number = 0; i < result.length; i++){
-            var r: number 
+            var r: number = this.getRandomInt(i, result.length);
+            var temp: string = result[r];
+            result[r] = result[i];
+            result[i] = temp; 
         }
-        
-        return null;
+        return result;
     }
     
-    GenerateNeighborMemorMatrix(memoryMatrix: string[]): string[]{
-        return null;
+    GenerateNeighborMemoryMatrix(memoryMatrix: string[]): string[]{
+        var result = memoryMatrix.slice();
+
+        var ranIndex: number = this.getRandomInt(0, result.length);
+        var adjIndex: number;
+        if (ranIndex == result.length - 1)
+            adjIndex = 0;
+        else
+            adjIndex = ranIndex + 1;
+
+        var tmp: string = result[ranIndex];
+        result[ranIndex] = result[adjIndex];
+        result[adjIndex] = tmp;  
+        return result;
     }
     
     MeasureOfQuality(memoryMatrix: string[]): number {
-        return 0;
+        var answer: number = 0.0;
+        for (var i: number = 0; i < memoryMatrix.length - 1; ++i) {
+            var c1: string = memoryMatrix[i];
+            var c2: string = memoryMatrix[i + 1];
+            var d: number = this.citiesData.Distance(c1, c2);
+            answer += d;
+        }
+        return answer;
     }
     
-    Solve(showProgress: boolean): void{
-        
+    Solve(doProgressBar: boolean): void{
+        var pb: boolean = doProgressBar;
+        var numberOfSymbolsToPrint: number = 10; 
+        var increment = this.maxNumberCycles / numberOfSymbolsToPrint;
+        if (pb) console.log("\nEntering SBC Traveling Salesman Problem algorithm main processing loop\n");
+        if (pb) console.log("Progress: |==========|");
+        if (pb) process.stdout.write("           ");
+        var cycle: number = 0;
+
+        while (cycle < this.maxNumberCycles) {
+            for (var i: number = 0; i < this.totalNumberBees; ++i) {
+                if (this.bees[i].status == 1){
+                    this.ProcessActiveBee(i);
+                }
+                else if (this.bees[i].status == 2){
+                    this.ProcessScoutBee(i);
+                }
+                else if (this.bees[i].status == 0){
+                    this.ProcessInactiveBee(i);
+                }
+            } 
+            ++cycle;
+
+            if (pb && cycle % increment == 0){
+                process.stdout.write("^");   
+            }
+        } 
+        if (pb) console.log("");
     }
     
     ProcessActiveBee(i: number) : void{
-        
+        var neighbor: string[] = this.GenerateNeighborMemoryMatrix(this.bees[i].memoryMatrix);
+        var neighborQuality: number = this.MeasureOfQuality(neighbor); 
+        var prob = this.getRandomDouble();
+        var memoryWasUpdated: boolean = false;
+        var numberOfVisitsOverLimit: boolean = false; 
+
+        if (neighborQuality < this.bees[i].measureOfQuality) { // better
+            if (prob < this.probMistake) { // mistake
+                ++this.bees[i].numberOfVisits;
+                if (this.bees[i].numberOfVisits > this.maxNumberVisits){
+                    numberOfVisitsOverLimit = true;           
+                }
+            }
+            else { // No mistake
+                this.bees[i].memoryMatrix = neighbor; // Array.Copy(neighbor, bees[i].memoryMatrix, neighbor.Length);
+                this.bees[i].measureOfQuality = neighborQuality;
+                this.bees[i].numberOfVisits = 0; 
+                memoryWasUpdated = true; 
+            }
+        }
+        else { // Did not find better neighbor
+            if (prob < this.probMistake) { // Mistake
+                this.bees[i].memoryMatrix = neighbor; // Array.Copy(neighbor, bees[i].memoryMatrix, neighbor.Length);
+                this.bees[i].measureOfQuality = neighborQuality;
+                this.bees[i].numberOfVisits = 0;
+                memoryWasUpdated = true; 
+            }
+            else { // No mistake
+                ++this.bees[i].numberOfVisits;
+                if (this.bees[i].numberOfVisits > this.maxNumberVisits){
+                    numberOfVisitsOverLimit = true;  
+                }
+            }
+        }
+
+        if (numberOfVisitsOverLimit == true) {
+            this.bees[i].status = 0; 
+            this.bees[i].numberOfVisits = 0;
+            var x: number = this.getRandomInt(0,this.numberInactive); //equivalent to random.Next(this.numberInactive); 
+            this.bees[this.indexesOfInactiveBees[x]].status = 1; 
+            this.indexesOfInactiveBees[x] = i; 
+        }
+        else if (memoryWasUpdated == true) {
+            if (this.bees[i].measureOfQuality < this.bestMeasureOfQuality) {
+                this.bestMemoryMatrix = this.bees[i].memoryMatrix;  //Array.Copy(bees[i].memoryMatrix, this.bestMemoryMatrix, bees[i].memoryMatrix.Length); 
+                this.bestMeasureOfQuality = this.bees[i].measureOfQuality
+            }
+            this.DoWaggleDance(i);
+        }
+        else {
+            return;
+        }
     }
     
     ProcessScoutBee(i: number) : void{
+        var randomFoodSource: string[] = this.GenerateRandomMemoryMatrix();
+        var randomFoodSourceQuality: number = this.MeasureOfQuality(randomFoodSource);
         
-    } 
+        if (randomFoodSourceQuality < this.bees[i].measureOfQuality) {
+            this.bees[i].memoryMatrix = randomFoodSource; //Array.Copy(randomFoodSource, bees[i].memoryMatrix, randomFoodSource.Length);
+            this.bees[i].measureOfQuality = randomFoodSourceQuality;
+            if (this.bees[i].measureOfQuality < this.bestMeasureOfQuality) {
+                this.bestMemoryMatrix = this.bees[i].memoryMatrix; // Array.Copy(bees[i].memoryMatrix, this.bestMemoryMatrix, bees[i].memoryMatrix.Length);
+                this.bestMeasureOfQuality = this.bees[i].measureOfQuality;
+            } 
+        
+            this.DoWaggleDance(i);
+        }
+    }
     
     ProcessInactiveBee(i: number) : void{
-        
+        return;
     }
     
     DoWaggleDance(i: number) : void{
-        
+        for (var ii: number = 0; ii < this.numberInactive; ++ii) {
+            var b: number = this.indexesOfInactiveBees[ii]; 
+            if (this.bees[i].measureOfQuality < this.bees[b].measureOfQuality) {
+                var p: number = this.getRandomDouble(); 
+                if (this.probPersuasion > p) {
+                    this.bees[b].memoryMatrix = this.bees[i].memoryMatrix; //Array.Copy(bees[i].memoryMatrix, bees[b].memoryMatrix, bees[i].memoryMatrix.Length);
+                    this.bees[b].measureOfQuality = this.bees[i].measureOfQuality;
+                } 
+            } 
+        } 
     }
     
-    getRandomInt() {
-        var min: number = -2147483648;
-        var max: number = 2147483647;
+    getRandomInt(minVal?: number, maxVal?: number) {
+        
+        var min: number = minVal || 0; //-2147483648;
+        var max: number = maxVal || 2147483647;
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+    
+    getRandomDouble(): number{
+        return Math.random();
     }
 }
 
@@ -187,7 +311,7 @@ class CitiesData {
     }
 }
 
-/* TEST 
+// TEST 
 function test() {
     var cd : CitiesData = new CitiesData(10);
     
@@ -206,7 +330,7 @@ function test() {
     console.log("TOSTRING: " + cd.ToString());
 }
 
-test(); */
+//test(); 
 
 /*
 In terms of ratios, there's some research that suggests the best percentages of active, inactive and scout bees are often
@@ -239,7 +363,6 @@ function main(args: string[]):void {
     
     console.log("\nFinal hive");
     console.log(hive.ToString());
-    
     
     console.log("End Simulated Bee Colony demo");
 }

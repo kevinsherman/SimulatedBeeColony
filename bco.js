@@ -34,15 +34,42 @@ var Hive = (function () {
         this.maxNumberVisits = maxNumberVisits;
         this.maxNumberCycles = maxNumberCycles;
         this.citiesData = citiesData;
-        this.bees = new Bee[totalNumberBees];
+        this.bees = new Array(totalNumberBees);
         this.bestMemoryMatrix = this.GenerateRandomMemoryMatrix();
         this.bestMeasureOfQuality = this.MeasureOfQuality(this.bestMemoryMatrix);
-        this.indexesOfInactiveBees = new Array[numberInactive];
+        this.indexesOfInactiveBees = new Array(numberInactive);
+        for (var i = 0; i < this.totalNumberBees; ++i) {
+            var currStatus;
+            if (i < this.numberInactive) {
+                currStatus = 0;
+                this.indexesOfInactiveBees[i] = i;
+            }
+            else if (i < this.numberInactive + this.numberScout) {
+                currStatus = 2; // scount
+            }
+            else {
+                currStatus = 1; // active
+            }
+            var randomMemoryMatrix = this.GenerateRandomMemoryMatrix();
+            var mq = this.MeasureOfQuality(randomMemoryMatrix);
+            var numberOfVisits = 0;
+            this.bees[i] = new Bee(currStatus, randomMemoryMatrix, mq, numberOfVisits);
+            if (this.bees[i].measureOfQuality < this.bestMeasureOfQuality) {
+                //Array.Copy(this.bees[i].memoryMatrix, this.bestMemoryMatrix, 
+                //    this.bees[i].memoryMatrix.length);
+                this.bestMeasureOfQuality = this.bees[i].measureOfQuality;
+            }
+        }
     }
     Hive.prototype.ToString = function () {
         return null;
     };
     Hive.prototype.GenerateRandomMemoryMatrix = function () {
+        var result = new Array(this.citiesData.cities.length);
+        //Array.Copy(this.citiesData.cities, result, this.citiesData.cities.length);
+        for (var i = 0; i < result.length; i++) {
+            var r;
+        }
         return null;
     };
     Hive.prototype.GenerateNeighborMemorMatrix = function (memoryMatrix) {
@@ -55,7 +82,7 @@ var Hive = (function () {
     };
     Hive.prototype.ProcessActiveBee = function (i) {
     };
-    Hive.prototype.ProcessScoutnBee = function (i) {
+    Hive.prototype.ProcessScoutBee = function (i) {
     };
     Hive.prototype.ProcessInactiveBee = function (i) {
     };

@@ -44,10 +44,10 @@ class Hive {
     public probPersuasion = 0.90;
     public probMistake = 0.01; 
 
-    public bees: Bee[];
+    public bees: Array<Bee>;
     public bestMemoryMatrix: string[];
     public bestMeasureOfQuality: number;
-    public indexesOfInactiveBees: number[];
+    public indexesOfInactiveBees: Array<number>;
    
     ToString(): string {
         return null;
@@ -66,14 +66,46 @@ class Hive {
         this.maxNumberCycles = maxNumberCycles;
         this.citiesData = citiesData;
         
-        this.bees = new Bee[totalNumberBees];
+        this.bees = new Array(totalNumberBees);
         this.bestMemoryMatrix = this.GenerateRandomMemoryMatrix();
         this.bestMeasureOfQuality = this.MeasureOfQuality(this.bestMemoryMatrix);
         
-        this.indexesOfInactiveBees = new Array[numberInactive];
+        this.indexesOfInactiveBees = new Array<number>(numberInactive);
+        
+        for(var i: number = 0; i < this.totalNumberBees; ++i){
+            var currStatus: number;
+            if(i < this.numberInactive){
+                currStatus = 0;
+                this.indexesOfInactiveBees[i]=i;
+            } else if (i < this.numberInactive + this.numberScout) {
+                currStatus = 2; // scount
+            } else {
+                currStatus = 1; // active
+            }
+            
+            var randomMemoryMatrix : string[] = this.GenerateRandomMemoryMatrix();
+            var mq : number = this.MeasureOfQuality(randomMemoryMatrix);
+            var numberOfVisits : number = 0;
+            
+            this.bees[i] = new Bee(currStatus, randomMemoryMatrix, mq, numberOfVisits);
+            
+            if(this.bees[i].measureOfQuality < this.bestMeasureOfQuality){
+                //Array.Copy(this.bees[i].memoryMatrix, this.bestMemoryMatrix, 
+                //    this.bees[i].memoryMatrix.length);
+                this.bestMeasureOfQuality = this.bees[i].measureOfQuality;
+            }
+        }
+        
     }
     
     GenerateRandomMemoryMatrix(): string[]{
+        
+        var result: Array<string> = new Array<string>(this.citiesData.cities.length);
+        //Array.Copy(this.citiesData.cities, result, this.citiesData.cities.length);
+        for (var i: number = 0; i < result.length; i++){
+            var r: number 
+        }
+        
         return null;
     }
     
@@ -93,7 +125,7 @@ class Hive {
         
     }
     
-    ProcessScoutnBee(i: number) : void{
+    ProcessScoutBee(i: number) : void{
         
     } 
     

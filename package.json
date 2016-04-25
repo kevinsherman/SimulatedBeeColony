@@ -4,7 +4,7 @@
   "description": "",
   "main": "bco.js",
   "scripts": {
-    "start": "concurrently 'tsc -w simulatedBeeColony.ts' 'nodemon simulatedBeeColony.js'"
+    "start": "nodemon simulatedBeeColony.js"
   },
   "repository": {
     "type": "git",

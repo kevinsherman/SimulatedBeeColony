@@ -1,4 +1,3 @@
-/// <reference path="./typings/tsd.d.ts" />
 class Bee {
     public status: number;
     public memoryMatrix: string[];

@@ -11,7 +11,7 @@ The article is based on C# - but was written to be easily ported to other langua
 2. Install global dependencies:  
   Typescript: `npm install -g typescript`  
   Nodemon: `npm install -g nodemon`  
-  Concurrently: `npm install -g concurrently`
+  Typings: `npm install -g typings`
   
 ###Clone Repository:
 `git clone https://github.com/kevinsherman/SimulatedBeeColony` 

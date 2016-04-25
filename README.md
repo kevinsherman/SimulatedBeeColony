@@ -17,6 +17,7 @@ The article is based on C# - but was written to be easily ported to other langua
 `git clone https://github.com/kevinsherman/SimulatedBeeColony` 
 
 ###Install package dependencies:
+`cd SimulatedBeeColony`
 `npm install`
 
 ###Run Sample Application

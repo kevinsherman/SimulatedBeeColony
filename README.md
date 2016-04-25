@@ -17,13 +17,26 @@ The article is based on C# - but was written to be easily ported to other langua
 `git clone https://github.com/kevinsherman/SimulatedBeeColony` 
 
 ###Install package dependencies:
-`cd SimulatedBeeColony`
-`npm install`
+* `cd SimulatedBeeColony`  
+* `npm install`  
+* `typings install`
 
 ###Run Sample Application
-`npm start`
+Open a terminal/console and run `tsc -w simulatedBeeColony.js`. This will run the Typescript compiler in watch mode, and will regenerate the javascript file after any changes are made (such as updating the maxNumberCycles).  
 
-As an alternative to running `npm start`, you can open two separate terminals from the project root, and in one run `tsc -w simulatedBeeColony.ts` and in the other run `nodemon simulatedBeeColony.js`. This produces cleaner output (something to do with the `process.stdout` as executed by `concurrently`).
+Open a second terminal/console and enter `nodemon simulatedBeeColony.js`. This will run the JavaScript file emitted by the TypeScript compiler, and will reload it based on any changes. You can type `rs` at any time to re-run the file - instead of waiting for a file change.  Alternatively, you can run `npm start` and it will run the same command.  
+
+All of the variables you will want to edit are in the `main` function at the bottom of the file. 
+```
+    var totalNumberBees : number = 100;
+    var numberInactive : number = 20;
+    var numberActive : number = 50;
+    var numberScout : number = 30;
+    var maxNumberVisits : number = 100;
+    var maxNumberCycles : number = 3460; // <-- This usually needs to be increased to get a more accurate 'bestMeasureOfQuality' 
+```
+Go ahead and change `maxNumberCycles` to 50000 and see if you can get the optimal solution of 19. 
+
 
 ##Notes:
 

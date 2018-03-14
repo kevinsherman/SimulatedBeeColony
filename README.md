@@ -4,23 +4,23 @@ This is a port of the sample code from [James McCaffrey's](https://jamesmccaffre
 
 The article is based on C# - but was written to be easily ported to other languages.
 
-##Installation
+## Installation
 
-###Prerequisites:
+### Prerequisites:
 1. Make sure [Node & NPM](https://nodejs.org) are installed.
 2. Install global dependencies:  
   Typescript: `npm install -g typescript`  
   TS-Node: `npm install -g ts-node`
 
   
-###Clone Repository:
+### Clone Repository:
 `git clone https://github.com/kevinsherman/SimulatedBeeColony` 
 
-###Install package dependencies:
+### Install package dependencies:
 * `cd SimulatedBeeColony`  
 * `npm install`  
 
-###Run Sample Application
+### Run Sample Application
 Open a terminal/console and run `npm start`.  
 
 All of the variables you will want to edit are in the `main` function at the bottom of the file. 
@@ -35,7 +35,7 @@ All of the variables you will want to edit are in the `main` function at the bot
 Go ahead and change `maxNumberCycles` to 50000 and see if you can get the optimal solution of 19. 
 
 
-##Notes:
+## Notes:
 
 1. The 'test' method simply validates a few assumptions and prints to the console. The execution of this function is commented out - and is only for debugging purposes.
 2. The 'main' method is where you can tweak the input parameters.

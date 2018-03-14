@@ -10,8 +10,8 @@ The article is based on C# - but was written to be easily ported to other langua
 1. Make sure [Node & NPM](https://nodejs.org) are installed.
 2. Install global dependencies:  
   Typescript: `npm install -g typescript`  
-  Nodemon: `npm install -g nodemon`  
-  Typings: `npm install -g typings`
+  TS-Node: `npm install -g ts-node`
+
   
 ###Clone Repository:
 `git clone https://github.com/kevinsherman/SimulatedBeeColony` 
@@ -19,12 +19,9 @@ The article is based on C# - but was written to be easily ported to other langua
 ###Install package dependencies:
 * `cd SimulatedBeeColony`  
 * `npm install`  
-* `typings install`
 
 ###Run Sample Application
-Open a terminal/console and run `tsc -w simulatedBeeColony.js`. This will run the Typescript compiler in watch mode, and will regenerate the javascript file after any changes are made (such as updating the maxNumberCycles).  
-
-Open a second terminal/console and enter `nodemon simulatedBeeColony.js`. This will run the JavaScript file emitted by the TypeScript compiler, and will reload it based on any changes. You can type `rs` at any time to re-run the file - instead of waiting for a file change.  Alternatively, you can run `npm start` and it will run the same command.  
+Open a terminal/console and run `npm start`.  
 
 All of the variables you will want to edit are in the `main` function at the bottom of the file. 
 ```

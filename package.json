@@ -2,9 +2,8 @@
   "name": "beecolony",
   "version": "1.0.0",
   "description": "",
-  "main": "bco.js",
   "scripts": {
-    "start": "nodemon simulatedBeeColony.js"
+    "start": "ts-node simulatedBeeColony.ts"
   },
   "repository": {
     "type": "git",
@@ -13,7 +12,8 @@
   "author": "Kevin R. Sherman",
   "license": "ISC",
   "homepage": "https://github.com/kevinsherman/SimulatedBeeColony/blob/master/README.md",
-  "devDependencies": {
-    "typings": "^0.8.1"
+  "devDependencies": {},
+  "dependencies": {
+    "@types/node": "^9.4.7"
   }
 }

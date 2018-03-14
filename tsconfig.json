@@ -2,17 +2,21 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "declaration": false,
+        "declaration": true,
         "noImplicitAny": true,
+        "outDir": "dist",
         "removeComments": true,
-        "sourceMap": false,
-        "noLib": false
+        "sourceMap": true,
+        "noLib": false,
+        "types": [
+            "node"
+        ],
+        "typeRoots": [
+            "../node_modules/@types"
+        ]
     },
-    "filesGlob": [
-        "./**/*.ts",
-        "!./node_modules/**/*.ts"
-    ],
-    "files": [
-        "./typings/main.d.ts"
+    "exclude": [
+        "node_modules",
+        "dist"
     ]
 }
